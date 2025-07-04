@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: Brew Scheduler API
+  version: 0.1.0
+
+paths:
+  /schedule:
+    get:
+      operationId: getSchedule                # <- name of the handler method
+      parameters:
+        - in: query
+          name: week
+          required: true
+          schema:
+            type: string
+            format: date                      # e.g. 2025-07-07
+      responses:
+        '200':
+          description: schedule stub
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleResponse'
+
+components:
+  schemas:
+    ScheduleResponse:
+      type: object
+      required: [week, message]
+      properties:
+        week:
+          type: string
+        message:
+          type: string
