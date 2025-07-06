@@ -3,7 +3,7 @@
 <!--toc:start-->
 - [Brewery-Scheduler](#brewery-scheduler)
   - [What’s in place right now](#whats-in-place-right-now)
-    - [Schema v0](#schema-v0)
+    - [Current Schema](#current-schema)
   - [Getting it running locally](#getting-it-running-locally)
 <!--toc:end-->
 
@@ -24,13 +24,15 @@ Below is a quick tour of what’s done and how to spin it up on your laptop.
 
 ---
 
-### Schema v0
+### Current Schema
 
 | Table | Purpose |
 |-------|---------|
 | **users** | login identity – email, password hash, soft-delete flag |
 | **employees** | 1-to-1 with users – roster role, hire date, active flag |
 | **role enum** | `host`, `server`, `food_runner`, `bartender_north`, `bartender_south`, `cocktailer`, `kitchen_line`, `kitchen_prep` (just a basic one more can be added based on further requirements)|
+ **shift_templates** | Recurring time blocks – weekday, start/end, label, active flag |
+| **template_roles** | Default head-counts per template (`template_id`, `role`, `default_needed`) |
 
 Migrations live in **`sql/schema/`**; Goose tracks them in `goose_db_version`.
 
