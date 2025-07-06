@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:14
+    container_name: ${DOCKER_CONTAINER:-postgres}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_SCHEMA}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${HOST_PORT:-5432}:5432"
+    volumes:
+      # 1) named volume that survives restarts
+      - postgres-data:/var/lib/postgresql/data
+      # 2) optional init scripts / dumps (only if you need them)
+      # - ./data.dump:/docker-entrypoint-initdb.d/data.dump
+      # - ./scripts/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: brewery-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "${PGADMIN_PORT:-8081}:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:   # persisted Postgres files
+  pgadmin-data:    # pgAdmin settings/bookmarks
