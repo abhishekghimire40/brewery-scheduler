@@ -12,5 +12,9 @@ migrate-up:
 migrate-down:
 	goose -dir sql/schema postgres "$(DB_URL)" down
 
+seed:
+	psql "$(DB_URL)" -f sql/seed/seed.sql
+
 dev: migrate-up
 	go build -o brewery-scheduler main.go && ./brewery-scheduler
+
