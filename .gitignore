@@ -27,6 +27,9 @@ go.work.sum
 # env file
 .env
 
+# config for sql linter
+.sqlfluff
+
 # Editor/IDE
 # .idea/
 # .vscode/

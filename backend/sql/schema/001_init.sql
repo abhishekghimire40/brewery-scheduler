@@ -1,8 +1,12 @@
+-- sqlfluff: dialect=postgres
 -- +goose Up
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";   
 
 
 CREATE TYPE role AS ENUM ('host','server','food_runner','bartender_north','bartender_south','cocktailer','kitchen_line','kitchen_prep');
+
+CREATE TYPE account_role as ENUM ('admin','manager','employee');
+
 
 CREATE TABLE users (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -12,6 +16,7 @@ CREATE TABLE users (
   last_name      TEXT,
   phone          TEXT,
   is_active      BOOLEAN      NOT NULL DEFAULT true,
+  account_role account_role NOT NULL DEFAULT 'employee',
   created_at     TIMESTAMPTZ  NOT NULL DEFAULT now(),
   updated_at     TIMESTAMPTZ
 );
