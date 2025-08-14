@@ -28,7 +28,6 @@ Below is a quick tour of what’s done and how to spin it up on your laptop.
 
 | Table | Purpose |
 |-------|---------|
-| **users** | login identity – email, password hash, soft-delete flag |
 | **employees** | 1-to-1 with users – roster role, hire date, active flag |
 | **role enum** | `host`, `server`, `food_runner`, `bartender_north`, `bartender_south`, `cocktailer`, `kitchen_line`, `kitchen_prep` (just a basic one more can be added based on further requirements)|
  **shift_templates** | Recurring time blocks – weekday, start/end, label, active flag |

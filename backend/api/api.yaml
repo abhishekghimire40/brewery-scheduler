@@ -6,14 +6,14 @@ info:
 paths:
   /schedule:
     get:
-      operationId: getSchedule                # <- name of the handler method
+      operationId: getSchedule                
       parameters:
         - in: query
           name: week
           required: true
           schema:
             type: string
-            format: date                      # e.g. 2025-07-07
+            format: date                      
       responses:
         '200':
           description: schedule stub
@@ -21,6 +21,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScheduleResponse'
+
+  /auth/signup:
+    post:
+      summary: create an account for the user
+      operationId: signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: User created successfully!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          description: Invalid Inputs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Email already exists 
+          content: { application/json: {schema: {$ref: '#/components/schemas/Error'}}}
+
+  /auth/login:
+    post:
+      summary: login the user and get tokens
+      operationId: login
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successfully logged in and tokens issued
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthTokenResponse'}
+        '401':
+          description: Invalid Credentials
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error'}
+
+
+
 
 components:
   schemas:
@@ -32,3 +84,61 @@ components:
           type: string
         message:
           type: string
+
+    SignupRequest:
+      type: object
+      required: [email,password]
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        firstName: {type:string}
+        lastName: {type:string}
+        phone: {type:string}
+
+    LoginRequest:
+      type: object
+      required: [email,password]
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+
+    UserProfile:
+      type: object
+      required: [id,email,accountRole]
+      properties:
+        id: {type: string,format: uuid}
+        email: {type:string, format: email}
+        accountRole:
+          type: string
+          enum: [admin,manager,employee]
+        firstName: {type: string, nullable: true}
+        lastName: {type: string, nullable: true}
+        phone: {type: string, nullable: true}
+
+    AuthTokenResponse:
+      type: object
+      required: [accessToken,refreshToken,user]
+      properties:
+        accessToken: {type: string, description: "JWT ~15min expiry"}
+        refreshToken: {type: string, description: "random string with long expiry time"}
+        user:
+          $ref: '#/components/schemas/UserProfile'
+
+    Error:
+      type: object
+      required: [code,message]
+      properties:
+        code: {type:string,example:"invalid_input"}
+        message: {type:string}
+        details: {type: object,additionalProperties: true}
+

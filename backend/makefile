@@ -15,6 +15,9 @@ migrate-down:
 seed:
 	psql "$(DB_URL)" -f sql/seed/seed.sql
 
+oapi:
+	oapi-codegen -config api/oapi.yaml api/api.yaml
+
 dev: migrate-up
 	go build -o brewery-scheduler main.go && ./brewery-scheduler
 

@@ -2,7 +2,7 @@
 -- shift templates table stores  recurring time blocks
 CREATE TABLE shift_templates (
     id BIGSERIAL PRIMARY KEY,
-    weekday SMALLINT NOT NULL CHECK (weekday BETWEEN 0 AND 6),
+    week_day SMALLINT NOT NULL CHECK (week_day BETWEEN 0 AND 6),
     start_time TIME,
     end_time TIME,
     label TEXT NOT NULL,
